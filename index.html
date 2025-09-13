@@ -3,51 +3,86 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>I Win</title>
+  <title>I Win / I Lose</title>
   <style>
-    /* Full black background */
-    html,body {
-      height: 100%;
+    body {
       margin: 0;
-      background: #000;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* Centering container */
-    .stage {
-      height: 100%;
+      height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
-    }
-
-    /* Red box */
-    .box {
-      background: #e21b1b;           /* vivid red */
+      align-items: center;
+      background: #000;
       color: white;
-      padding: 36px 48px;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      text-align: center;
-      user-select: none;
-      -webkit-user-select: none;
-      transform: translateZ(0);
+      font-family: system-ui, sans-serif;
+      overflow: hidden;
     }
-
-    /* Make it look nice on very small screens */
-    @media (max-width: 420px) {
-      .box { font-size: 1.6rem; padding: 28px 32px; }
+    .container {
+      text-align: center;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .win-btn { background: #28a745; color: #fff; }
+    .lose-btn { background: #dc3545; color: #fff; }
+    .message {
+      margin-top: 30px;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: hsl(var(--hue), 100%, 50%);
+      top: -10px;
+      animation: fall 3s linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="stage">
-    <div class="box">i win</div>
+  <div class="container">
+    <button class="win-btn" onclick="showWin()">I Win</button>
+    <button class="lose-btn" onclick="showLose()">I Lose</button>
+    <div class="message" id="message"></div>
   </div>
+
+  <script>
+    function showWin() {
+      const msg = document.getElementById("message");
+      msg.textContent = "🎉 You are a winner! 🎉";
+      msg.style.color = "gold";
+      spawnConfetti();
+    }
+
+    function showLose() {
+      const msg = document.getElementById("message");
+      msg.textContent = "NO, no one’s a loser!";
+      msg.style.color = "red";
+    }
+
+    function spawnConfetti() {
+      for (let i = 0; i < 100; i++) {
+        const conf = document.createElement("div");
+        conf.className = "confetti";
+        conf.style.left = Math.random() * 100 + "vw";
+        conf.style.setProperty("--hue", Math.floor(Math.random() * 360));
+        conf.style.animationDelay = Math.random() * 2 + "s";
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 3000);
+      }
+    }
+  </script>
 </body>
 </html>
